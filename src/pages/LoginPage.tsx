@@ -3,7 +3,7 @@ import React from 'react';
 import theme from "../style/theme";
 import {WINDOW_WIDTH} from "../const/window";
 
-const LoginPage = () => {
+const LoginPage = ({ navigation }) => {
   return (
       <View style={styles.container}>
         <View style={styles.uiContainer}>
@@ -11,13 +11,13 @@ const LoginPage = () => {
           <Text style={styles.normalText}>Project Panda</Text>
           <View style={styles.socialButtonContainer}>
             <TouchableOpacity
-                onPress={() => {}}
+                onPress={() => navigation.navigate('Login')}
                 style={styles.socialButton}
             >
               <Text style={styles.socialText}>로그인 하기</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => {}}
+                onPress={() => navigation.navigate('SignUp')}
                 style={styles.socialButton}
             >
               <Text style={styles.socialText}>회원가입 하기</Text>
