@@ -2,8 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import React from 'react';
 import theme from "../style/theme";
 import {WINDOW_WIDTH} from "../const/window";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../App";
 
-const LoginPage = ({ navigation }) => {
+type LoginScreenProp = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const LoginPage = ({ navigation }: LoginScreenProp) => {
   return (
       <View style={styles.container}>
         <View style={styles.uiContainer}>

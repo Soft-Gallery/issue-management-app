@@ -1,15 +1,37 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import theme from "../style/theme";
+import postLogin from "../remotes/auth/postLogin";
+import { useNavigation } from '@react-navigation/native';
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../App";
+import {useSetRecoilState} from "recoil";
+import {userTokenState} from "../recoil/atom";
 
-const LoginForm = () => {
-    const [email, setEmail] = useState('');
+type LoginFormScreenProp = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+const LoginForm = ({ navigation }: LoginFormScreenProp) => {
+    const [id, setId] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        // 로그인 로직 추가
-        console.log('Email:', email);
-        console.log('Password:', password);
+    const setUserTokenValue = useSetRecoilState(userTokenState);
+
+    const handleLogin = async () => {
+        try {
+            const token = await postLogin(id, password);
+            if (token) {
+                setUserTokenValue(token);
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Main' }],
+                });
+            } else {
+                Alert.alert('로그인 실패', '아이디 또는 비밀번호가 잘못되었습니다.');
+            }
+        } catch (error) {
+            console.error('Login error', error);
+            Alert.alert('로그인 실패', '알 수 없는 오류가 발생했습니다.');
+        }
     };
 
     return (
@@ -17,10 +39,11 @@ const LoginForm = () => {
             <Text style={styles.title}>로그인</Text>
             <TextInput
                 style={styles.input}
-                placeholder="이메일"
-                value={email}
-                onChangeText={setEmail}
+                placeholder="아이디"
+                value={id}
+                onChangeText={setId}
                 keyboardType="email-address"
+                placeholderTextColor={theme.color.gray3}
             />
             <TextInput
                 style={styles.input}
@@ -28,6 +51,7 @@ const LoginForm = () => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
+                placeholderTextColor={theme.color.gray3}
             />
             <TouchableOpacity onPress={handleLogin} style={styles.button}>
                 <Text style={styles.buttonText}>로그인 하기</Text>
@@ -59,12 +83,15 @@ const styles = StyleSheet.create({
         borderColor: theme.color.gray3,
         borderRadius: 5,
         backgroundColor: theme.color.white,
+        color: theme.color.black,
     },
     button: {
-        backgroundColor: theme.color.main,
+        width: '100%',
+        backgroundColor: theme.color.gray2,
         padding: 12,
         borderRadius: 5,
         alignItems: 'center',
+        marginBottom: 60,
     },
     buttonText: {
         color: theme.color.white,
