@@ -61,7 +61,7 @@ const TesterPage = ({ navigation }: TesterPageScreenProp) => {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('CreateIssue')} style={styles.button}>
@@ -82,7 +82,7 @@ const TesterPage = ({ navigation }: TesterPageScreenProp) => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-        </ScrollView>
+        </View>
     );
 };
 

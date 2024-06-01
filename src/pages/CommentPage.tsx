@@ -6,6 +6,8 @@ import { useRecoilValue } from "recoil";
 import { userTokenState } from "../recoil/atom";
 import {IssueBrowse} from "./TesterPage";
 import theme from "../style/theme";
+import getIssueByIssueId from "../remotes/issue/getIssueByIssueId";
+import postComment from "../remotes/comment/postComment";
 
 type CommentPageScreenProp = NativeStackScreenProps<RootStackParamList, 'CommentPage'>;
 
@@ -17,8 +19,8 @@ const CommentPage = ({ route }: CommentPageScreenProp) => {
 
     useEffect(() => {
         const fetchIssue = async () => {
-            // const fetchedIssue = await getIssueById(issueId, userToken);
-            // setIssue(fetchedIssue);
+            const fetchedIssue = await getIssueByIssueId(issueId, userToken);
+            setIssue(fetchedIssue);
         };
 
         void fetchIssue();
@@ -26,11 +28,11 @@ const CommentPage = ({ route }: CommentPageScreenProp) => {
 
     const handleAddComment = async () => {
         if (issue) {
-            // await addCommentToIssue(issueId, commentText, userToken);
-            // setCommentText('');
-            // // Refresh issue data to show the new comment
-            // const updatedIssue = await getIssueById(issueId, userToken);
-            // setIssue(updatedIssue);
+            await postComment(commentText, issueId, userToken);
+            setCommentText('');
+
+            const fetchedIssue = await getIssueByIssueId(issueId, userToken);
+            setIssue(fetchedIssue);
         }
     };
 
@@ -92,11 +94,11 @@ const styles = StyleSheet.create({
     },
     commentAuthor: {
         fontSize: 12,
-        color: theme.color.gray2,
+        color: theme.color.white,
     },
     commentDate: {
         fontSize: 12,
-        color: theme.color.gray2,
+        color: theme.color.white,
     },
     input: {
         backgroundColor: theme.color.white,
