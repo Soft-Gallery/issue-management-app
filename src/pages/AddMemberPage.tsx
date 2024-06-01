@@ -3,18 +3,20 @@ import { StyleSheet, Text, TouchableOpacity, View, Alert, FlatList } from 'react
 import theme from "../style/theme";
 import getMemberAll from "../remotes/project/getMemberAll";
 import { useRecoilValue } from "recoil";
-import { userTokenState } from "../recoil/atom";
+import { projectCreateIdState, userIdState, userTokenState } from "../recoil/atom";
+import postMember from "../remotes/member/postMember";
 
 interface User {
     id: number;
     name: string;
-    role?: string;
+    role: string;
 }
 
 const roles = ['ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'];
 
 const AddMemberPage: React.FC = () => {
     const userToken = useRecoilValue(userTokenState);
+    const projectCreateId = useRecoilValue(projectCreateIdState);
     const [selectedRole, setSelectedRole] = useState<string>(roles[0]);
     const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
@@ -68,6 +70,18 @@ const AddMemberPage: React.FC = () => {
 
     const users = getUsersByRole(selectedRole);
 
+    const onClickConfirmButton = async () => {
+        try {
+            for (const user of selectedUsers) {
+                await postMember(projectCreateId, user.name, user.role, userToken);
+            }
+            Alert.alert('Success', 'Members added successfully');
+        } catch (error) {
+            console.error('Failed to add members:', error);
+            Alert.alert('Error', 'Failed to add members');
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.choosePinTextContainer}>
@@ -111,7 +125,7 @@ const AddMemberPage: React.FC = () => {
                 />
             </View>
             <TouchableOpacity
-                onPress={() => Alert.alert('Selected Users', JSON.stringify(selectedUsers))}
+                onPress={onClickConfirmButton}
                 style={styles.button}
             >
                 <Text style={styles.buttonText}>Confirm Members</Text>

@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {projectCreateState, projectsState} from "../recoil/atom";
+import {projectCreateIdState, projectCreateState, projectsState, userIdState, userTokenState} from "../recoil/atom";
 import theme from "../style/theme";
 import AddMemberPage from './AddMemberPage';
+import postProject from "../remotes/project/postProject";
 
 const ProjectCreationPage = () => {
+    const userToken = useRecoilValue(userTokenState);
     const setStep = useSetRecoilState(projectCreateState);
+    const setProjectCreateId = useSetRecoilState(projectCreateIdState);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const userId = useRecoilValue(userIdState);
 
-    const handleCreateProject = () => {
-        const newProject = {
-            name,
-            description,
-            projectState: 'InProgress',
-            adminId: 'admin-id-placeholder', // Replace with actual admin ID
-        };
-
+    const handleCreateProject = async () => {
         setName('');
         setDescription('');
+
+        const id = await postProject(name, description, "InProgress", userId, userToken);
+        setProjectCreateId(id);
         Alert.alert('Success', 'Project created successfully');
-        // });
 
         setStep(2);
     };

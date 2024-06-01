@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import theme from '../style/theme';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {userRoleState, userTokenState} from "../recoil/atom";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {userIdState, userRoleState, userTokenState} from "../recoil/atom";
 import { getUserInfo } from '../remotes/auth/getUserInfo';
 import { UserRole, UserWithRole } from '../types/user';
 import AdminPage from "./AdminPage";
@@ -15,6 +15,7 @@ type MainScreenProp = NativeStackScreenProps<RootStackParamList, 'Main'>;
 const MainPage = ({ navigation }: MainScreenProp) => {
     const userTokenValue = useRecoilValue(userTokenState);
     const [userRole, setUserRole] = useRecoilState(userRoleState);
+    const setUserId = useSetRecoilState(userIdState);
     const [userInfo, setUserInfo] = useState<UserWithRole<UserRole> | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -36,6 +37,7 @@ const MainPage = ({ navigation }: MainScreenProp) => {
                 const userInfoValue = await getUserInfo(userTokenValue);
                 setUserInfo(userInfoValue);
                 setUserRole(userInfoValue.role);
+                setUserId(userInfoValue.id);
                 console.log(userInfoValue);
             } catch (err) {
                 console.log(err);

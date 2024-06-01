@@ -12,6 +12,16 @@ export const userInfoState = atom<UserInfo>({
     }
 })
 
+export const userIdState = atom<string>({
+    key: 'userIdState',
+    default: '',
+})
+
+export const projectCreateIdState = atom<number>({
+    key: 'projectCreateIdState',
+    default: 0,
+})
+
 export const userRoleState = atom<string>({
     key: 'userRoleState',
     default: '',
