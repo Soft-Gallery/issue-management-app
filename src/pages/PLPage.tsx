@@ -1,20 +1,92 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import theme from '../style/theme';
-import {useRecoilValue} from "recoil";
-import {projectState} from "../recoil/atom";
+import { useRecoilValue } from 'recoil';
+import { projectState, userTokenState } from '../recoil/atom';
+import { IssueBrowse } from "./TesterPage";
+import getAllIssueById from "../remotes/issue/getAllIssueById";
+import AssignDeveloperPopup from "../popup/AssignDeveloperPopup";
 
 type PLPageScreenProp = NativeStackScreenProps<RootStackParamList, 'PL'>;
 
 const PLPage = ({ navigation }: PLPageScreenProp) => {
     const project = useRecoilValue(projectState);
+    const userToken = useRecoilValue(userTokenState);
+    const id = project.id;
+    const [issues, setIssues] = useState<IssueBrowse[]>([]);
+    const [showNewIssues, setShowNewIssues] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState<IssueBrowse | null>(null);
+
+    useEffect(() => {
+        const getIssues = async () => {
+            const issueBrowse: IssueBrowse[] = await getAllIssueById(id, userToken);
+            setIssues(issueBrowse);
+        };
+
+        void getIssues();
+    }, []);
+
+    const handleIssuePress = (issue: IssueBrowse) => {
+        if (issue.status === 'NEW') {
+            setSelectedIssue(issue);
+        }
+    };
+
+    const handleShowNewIssues = () => {
+        setShowNewIssues(true);
+    };
+
+    const handleShowAllIssues = () => {
+        setShowNewIssues(false);
+    };
+
+    const handleClosePopup = () => {
+        setSelectedIssue(null);
+    };
+
+    const filteredIssues = showNewIssues ? issues.filter(issue => issue.status === 'NEW') : issues;
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
+            <Text style={styles.sectionTitle}>There are Issues</Text>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={handleShowNewIssues} style={styles.button}>
+                    <Text style={styles.buttonText}>Show New Issues</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleShowAllIssues} style={styles.button}>
+                    <Text style={styles.buttonText}>Show All Issues</Text>
+                </TouchableOpacity>
+            </View>
+
+            <ScrollView>
+                {filteredIssues.map(issue => (
+                    <TouchableOpacity
+                        key={issue.id}
+                        style={styles.issueContainer}
+                        onPress={() => handleIssuePress(issue)}
+                    >
+                        <Text style={styles.issueTitle}>{issue.title}</Text>
+                        <Text style={styles.issueDescription}>{issue.description}</Text>
+                        <Text style={styles.issueDescription}>Status: {issue.status}</Text>
+                        <Text style={styles.issueDescription}>Priority: {issue.priority}</Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+
+            {selectedIssue && (
+                <AssignDeveloperPopup
+                    visible={!!selectedIssue}
+                    onClose={handleClosePopup}
+                    issueId={selectedIssue.id}
+                    projectId={id}
+                    userToken={userToken}
+                />
+            )}
         </View>
     );
 };
@@ -41,9 +113,10 @@ const styles = StyleSheet.create({
         color: theme.color.white,
         marginTop: 16,
     },
-    userText: {
-        fontSize: 16,
-        color: theme.color.white,
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 16,
     },
     issueContainer: {
         marginTop: 8,
@@ -51,6 +124,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: theme.color.gray3,
         borderRadius: 8,
+        backgroundColor: theme.color.gray1,
     },
     issueTitle: {
         fontSize: 18,
@@ -60,6 +134,19 @@ const styles = StyleSheet.create({
     issueDescription: {
         fontSize: 14,
         color: theme.color.white,
+    },
+    button: {
+        backgroundColor: theme.color.main,
+        padding: 12,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginVertical: 8,
+        flex: 1,
+        marginHorizontal: 4,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
     },
 });
 

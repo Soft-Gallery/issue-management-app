@@ -5,7 +5,7 @@ import {Proj, Project} from "../types/project";
 export const userInfoState = atom<UserInfo>({
     key: 'userInfoState',
     default: {
-        id: 0,
+        id: '',
         name: '',
         password: '',
         email: '',
