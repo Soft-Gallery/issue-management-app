@@ -17,9 +17,9 @@ const AdminPage = () => {
             <TouchableOpacity onPress={() => setView('create')} style={styles.button}>
                 <Text style={styles.buttonText}>Create Project</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setView('list')} style={styles.button}>
-                <Text style={styles.buttonText}>View Projects</Text>
-            </TouchableOpacity>
+            {/*<TouchableOpacity onPress={() => setView('list')} style={styles.button}>*/}
+            {/*    <Text style={styles.buttonText}>View Projects</Text>*/}
+            {/*</TouchableOpacity>*/}
             {view === 'create' && createStep === 1 && <ProjectCreationPage />}
             {view === 'create' && createStep === 2 && <AddMemberPage />}
         </View>

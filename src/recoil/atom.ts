@@ -1,6 +1,6 @@
 import {atom} from "recoil";
 import {UserInfo} from "../types/user";
-import {Project} from "../types/project";
+import {Proj, Project} from "../types/project";
 
 export const userInfoState = atom<UserInfo>({
     key: 'userInfoState',
@@ -32,15 +32,14 @@ export const userTokenState = atom<string>({
     default: '',
 })
 
-export const projectState = atom<Project>({
+export const projectState = atom<Proj>({
     key: 'projectState',
     default: {
-        title: 'Project',
-        description: '설명임',
-        pl: [],
-        dev: [],
-        tester: [],
-        issues: []
+        id: 0,
+        name: '',
+        description: '',
+        projectState: 'Closed',
+        adminId: '',
     },
 });
 

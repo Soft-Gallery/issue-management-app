@@ -5,6 +5,8 @@ import {projectCreateIdState, projectCreateState, projectsState, userIdState, us
 import theme from "../style/theme";
 import AddMemberPage from './AddMemberPage';
 import postProject from "../remotes/project/postProject";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../App";
 
 const ProjectCreationPage = () => {
     const userToken = useRecoilValue(userTokenState);
@@ -20,7 +22,7 @@ const ProjectCreationPage = () => {
 
         const id = await postProject(name, description, "InProgress", userId, userToken);
         setProjectCreateId(id);
-        Alert.alert('Success', 'Project created successfully');
+        Alert.alert('Success', `project number ${id}`);
 
         setStep(2);
     };

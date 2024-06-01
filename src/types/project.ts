@@ -14,3 +14,11 @@ export interface ProjectCardItemType {
     title: string;
     description: string;
 }
+
+export interface Proj {
+    id: number;
+    name: string;
+    description: string;
+    projectState: string;
+    adminId: string;
+}

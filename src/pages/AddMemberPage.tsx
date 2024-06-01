@@ -5,10 +5,17 @@ import getMemberAll from "../remotes/project/getMemberAll";
 import { useRecoilValue } from "recoil";
 import { projectCreateIdState, userIdState, userTokenState } from "../recoil/atom";
 import postMember from "../remotes/member/postMember";
+import postMembers from "../remotes/member/postMember";
 
 interface User {
-    id: number;
+    id: string;
     name: string;
+    role: string;
+}
+
+interface Member {
+    projectId: number;
+    userId: string;
     role: string;
 }
 
@@ -32,6 +39,7 @@ const AddMemberPage: React.FC = () => {
                 const tester = await getMemberAll('ROLE_TESTER', userToken);
 
                 setPLUsers(pl);
+                console.log(pl);
                 setDevUsers(dev);
                 setTesterUsers(tester);
             } catch (error) {
@@ -71,10 +79,16 @@ const AddMemberPage: React.FC = () => {
     const users = getUsersByRole(selectedRole);
 
     const onClickConfirmButton = async () => {
+        const membersToPost: Member[] = selectedUsers.map(user => ({
+            projectId: projectCreateId,
+            userId: user.id,
+            role: user.role,
+        }));
+
+        console.log(membersToPost);
+
         try {
-            for (const user of selectedUsers) {
-                await postMember(projectCreateId, user.name, user.role, userToken);
-            }
+            await postMembers(membersToPost, userToken);
             Alert.alert('Success', 'Members added successfully');
         } catch (error) {
             console.error('Failed to add members:', error);
@@ -118,7 +132,7 @@ const AddMemberPage: React.FC = () => {
                                 ]}
                                 onPress={() => handleSelectUser(item)}
                             >
-                                <Text style={styles.userButtonText}>{item.name}</Text>
+                                <Text style={styles.userButtonText}>{item.id}</Text>
                             </TouchableOpacity>
                         );
                     }}

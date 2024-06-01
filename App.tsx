@@ -12,6 +12,7 @@ import ProjectPage from "./src/pages/ProjectPage";
 import PLPage from "./src/pages/PLPage";
 import DeveloperPage from "./src/pages/DeveloperPage";
 import TesterPage from "./src/pages/TesterPage";
+import CreateIssuePage from "./src/pages/CreateIssuePage";
 
 export type RootStackParamList = {
     Home: undefined;
@@ -22,6 +23,7 @@ export type RootStackParamList = {
     PL: undefined;
     Developer: undefined;
     Tester: undefined;
+    CreateIssue: undefined;
 };
 
 
@@ -50,6 +52,7 @@ export default function App() {
                     <Stack.Screen name="PL" component={PLPage} options={{title: ''}}/>
                     <Stack.Screen name="Developer" component={DeveloperPage} options={{title: ''}}/>
                     <Stack.Screen name="Tester" component={TesterPage} options={{title: ''}}/>
+                    <Stack.Screen name="CreateIssue" component={CreateIssuePage} options={{title: ''}}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </RecoilRoot>

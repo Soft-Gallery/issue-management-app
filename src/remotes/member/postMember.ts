@@ -1,20 +1,23 @@
-import {client} from "../axios";
-export default async function postMember(projectId: number, userId: string, role: string, token:string) {
+import { client } from "../axios";
 
+interface Member {
+    projectId: number;
+    userId: string;
+    role: string;
+}
+
+export default async function postMembers(users: Member[], token: string) {
     try {
-        return await client.post(
+        const response = await client.post(
             '/member/add',
-            {
-                projectId,
-                userId,
-                role
-            },
+            users,
             {
                 headers: {
                     Authorization: `${token}`,
                 }
             }
         );
+        return response.data;
     } catch (error) {
         console.error('response error', error);
         throw error;
