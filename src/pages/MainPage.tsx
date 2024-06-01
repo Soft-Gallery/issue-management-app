@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import theme from '../style/theme';
 import { useRecoilValue } from 'recoil';
-import { userTokenState} from "../recoil/atom";
+import { userTokenState } from "../recoil/atom";
 import { getUserInfo } from '../remotes/auth/getUserInfo';
 import { UserRole, UserWithRole } from '../types/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import AdminPage from "./AdminPage";
+import ProjectPage from "./ProjectPage";
 
-type MainScreenProp = NativeStackScreenProps<RootStackParamList, 'Main'>;
-
-const MainPage = ({ navigation }: MainScreenProp) => {
+const MainPage = () => {
     const userTokenValue = useRecoilValue(userTokenState);
     const [userInfo, setUserInfo] = useState<UserWithRole<UserRole> | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -54,9 +53,9 @@ const MainPage = ({ navigation }: MainScreenProp) => {
     return (
         <View style={styles.container}>
             {userInfo.role === 'ROLE_ADMIN' && <AdminPage />}
-            {userInfo.role === 'ROLE_PL' && <PLPage />}
-            {userInfo.role === 'ROLE_DEVELOPER' && <DeveloperPage />}
-            {userInfo.role === 'ROLE_TESTER' && <TesterPage />}
+            {['ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'].includes(userInfo.role) && (
+                <ProjectPage />
+            )}
         </View>
     );
 };

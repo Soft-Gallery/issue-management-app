@@ -2,19 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert, FlatList } from 'react-native';
 import theme from "../style/theme";
 import getMemberAll from "../remotes/project/getMemberAll";
-import {useRecoilValue} from "recoil";
-import {userTokenState} from "../recoil/atom";
+import { useRecoilValue } from "recoil";
+import { userTokenState } from "../recoil/atom";
+
+interface User {
+    id: number;
+    name: string;
+    role?: string;
+}
 
 const roles = ['ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'];
 
-const AddMemberPage = () => {
+const AddMemberPage: React.FC = () => {
     const userToken = useRecoilValue(userTokenState);
-    const [selectedRole, setSelectedRole] = useState(roles[0]);
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [selectedRole, setSelectedRole] = useState<string>(roles[0]);
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
-    const [plUsers, setPLUsers] = useState([]);
-    const [devUsers, setDevUsers] = useState([]);
-    const [testerUsers, setTesterUsers] = useState([]);
+    const [plUsers, setPLUsers] = useState<User[]>([]);
+    const [devUsers, setDevUsers] = useState<User[]>([]);
+    const [testerUsers, setTesterUsers] = useState<User[]>([]);
 
     useEffect(() => {
         const fetchMembers = async () => {
@@ -33,15 +39,21 @@ const AddMemberPage = () => {
         };
 
         void fetchMembers();
-    }, []);
+    }, [userToken]);
 
-    const handleSelectUser = (user) => {
-        if (!selectedUsers.some(u => u.id === user.id)) {
-            setSelectedUsers([...selectedUsers, user]);
+    const handleSelectUser = (user: User) => {
+        const isSelected = selectedUsers.some(u => u.id === user.id);
+        let updatedUsers: User[];
+        if (isSelected) {
+            updatedUsers = selectedUsers.filter(u => u.id !== user.id);
+        } else {
+            updatedUsers = [...selectedUsers, { ...user, role: selectedRole }];
         }
+        setSelectedUsers(updatedUsers);
+        console.log('Selected Users:', updatedUsers);
     };
 
-    const getUsersByRole = (role) => {
+    const getUsersByRole = (role: string): User[] => {
         switch (role) {
             case 'ROLE_PL':
                 return plUsers;
@@ -59,8 +71,8 @@ const AddMemberPage = () => {
     return (
         <View style={styles.container}>
             <View style={styles.choosePinTextContainer}>
-                <View style={[styles.circle, {backgroundColor: theme.color.main}]}>
-                    <Text style={[styles.circleText, {color: theme.color.white}]}>2</Text>
+                <View style={[styles.circle, { backgroundColor: theme.color.main }]}>
+                    <Text style={[styles.circleText, { color: theme.color.white }]}>2</Text>
                 </View>
                 <Text style={styles.title}>Add Member</Text>
             </View>
@@ -82,14 +94,20 @@ const AddMemberPage = () => {
                 <FlatList
                     data={users}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.userButton}
-                            onPress={() => handleSelectUser(item)}
-                        >
-                            <Text style={styles.userButtonText}>{item.name}</Text>
-                        </TouchableOpacity>
-                    )}
+                    renderItem={({ item }) => {
+                        const isSelected = selectedUsers.some(u => u.id === item.id);
+                        return (
+                            <TouchableOpacity
+                                style={[
+                                    styles.userButton,
+                                    isSelected && styles.selectedUserButton,
+                                ]}
+                                onPress={() => handleSelectUser(item)}
+                            >
+                                <Text style={styles.userButtonText}>{item.name}</Text>
+                            </TouchableOpacity>
+                        );
+                    }}
                 />
             </View>
             <TouchableOpacity
@@ -167,6 +185,9 @@ const styles = StyleSheet.create({
         padding: 12,
         borderBottomWidth: 1,
         borderBottomColor: theme.color.gray3,
+    },
+    selectedUserButton: {
+        backgroundColor: theme.color.main,
     },
     userButtonText: {
         color: 'white',

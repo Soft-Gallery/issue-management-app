@@ -22,6 +22,18 @@ export const userTokenState = atom<string>({
     default: '',
 })
 
+export const projectState = atom<Project>({
+    key: 'projectState',
+    default: {
+        title: 'Project',
+        description: '설명임',
+        pl: [],
+        dev: [],
+        tester: [],
+        issues: []
+    },
+});
+
 export const projectsState = atom<Project[]>({
     key: 'projectsState',
     default: [],

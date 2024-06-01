@@ -3,10 +3,12 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'reac
 import ProjectCreationPage from './ProjectCreationPage';
 import theme from "../style/theme";
 import {WINDOW_WIDTH} from "../const/window";
-import AddMemberPage from "./AddMemberPage";  // Import the ProjectCreationPage component
+import AddMemberPage from "./AddMemberPage";
+import {useRecoilValue} from "recoil";
+import {projectCreateState} from "../recoil/atom";  // Import the ProjectCreationPage component
 
 const AdminPage = () => {
-    const [createStep, setCreateStep] = useState(1);
+    const createStep = useRecoilValue(projectCreateState);
     const [view, setView] = useState('');
 
     return (
