@@ -7,6 +7,7 @@ import { getUserInfo } from '../remotes/auth/getUserInfo';
 import { UserRole, UserWithRole } from '../types/user';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
+import AdminPage from "./AdminPage";
 
 type MainScreenProp = NativeStackScreenProps<RootStackParamList, 'Main'>;
 

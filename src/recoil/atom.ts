@@ -26,3 +26,8 @@ export const projectsState = atom<Project[]>({
     key: 'projectsState',
     default: [],
 });
+
+export const projectCreateState = atom<number>({
+    key: 'projectCreateState',
+    default: 1,
+})

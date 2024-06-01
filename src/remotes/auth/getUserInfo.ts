@@ -1,7 +1,5 @@
-import { client} from "../axios";
+import { client } from "../axios";
 import { UserRole, UserWithRole} from "../../types/user";
-import {useRecoilValue} from "recoil";
-import {userTokenState} from "../../recoil/atom";
 
 export const getUserInfo = async (token: string) => {
     const userTokenValue = token;

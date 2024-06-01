@@ -1,45 +1,25 @@
-// src/components/AdminPage.tsx
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { projectsState, userRoleState} from "../recoil/atom";
+import ProjectCreationPage from './ProjectCreationPage';
+import theme from "../style/theme";
+import {WINDOW_WIDTH} from "../const/window";
+import AddMemberPage from "./AddMemberPage";  // Import the ProjectCreationPage component
 
 const AdminPage = () => {
-    const [projectName, setProjectName] = useState('');
-    const [newRole, setNewRole] = useState('');
-    const [projects, setProjects] = useRecoilState(projectsState);
-    const [roles, setRoles] = useRecoilState(userRoleState);
-
-    const handleAddProject = () => {
-        setProjects([...projects, { name: projectName }]);
-        setProjectName('');
-    };
-
-    const handleAddRole = (role: string) => {
-        setRoles([...roles, role]);
-    };
+    const [createStep, setCreateStep] = useState(1);
+    const [view, setView] = useState('');
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Admin Page</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Project Name"
-                value={projectName}
-                onChangeText={setProjectName}
-            />
-            <TouchableOpacity onPress={handleAddProject} style={styles.button}>
-                <Text style={styles.buttonText}>Add Project</Text>
+            <TouchableOpacity onPress={() => setView('create')} style={styles.button}>
+                <Text style={styles.buttonText}>Create Project</Text>
             </TouchableOpacity>
-            <TextInput
-                style={styles.input}
-                placeholder="Role (PL, DEV, TESTER)"
-                value={newRole}
-                onChangeText={setNewRole}
-            />
-            <TouchableOpacity onPress={() => handleAddRole(newRole)} style={styles.button}>
-                <Text style={styles.buttonText}>Add Role</Text>
+            <TouchableOpacity onPress={() => setView('list')} style={styles.button}>
+                <Text style={styles.buttonText}>View Projects</Text>
             </TouchableOpacity>
+            {view === 'create' && createStep === 1 && <ProjectCreationPage />}
+            {view === 'create' && createStep === 2 && <AddMemberPage />}
         </View>
     );
 };
@@ -47,23 +27,18 @@ const AdminPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: 'white',
+        width: WINDOW_WIDTH,
+        padding: 32,
+        backgroundColor: theme.color.background,
     },
     title: {
         fontSize: 24,
+        color: theme.color.white,
         fontWeight: 'bold',
-    },
-    input: {
-        width: '100%',
-        padding: 12,
-        marginVertical: 8,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
+        marginBottom: 16,
     },
     button: {
-        backgroundColor: 'blue',
+        backgroundColor: theme.color.main,
         padding: 12,
         borderRadius: 5,
         alignItems: 'center',
