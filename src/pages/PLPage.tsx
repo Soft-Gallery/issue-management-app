@@ -13,19 +13,8 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{project.title}</Text>
+            <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
-            <Text style={styles.sectionTitle}>Project Leads:</Text>
-            {project.pl.map(pl => (
-                <Text key={pl.id} style={styles.userText}>{pl.name} ({pl.email})</Text>
-            ))}
-            <Text style={styles.sectionTitle}>Issues:</Text>
-            {project.issues.map(issue => (
-                <View key={issue.id} style={styles.issueContainer}>
-                    <Text style={styles.issueTitle}>{issue.title}</Text>
-                    <Text style={styles.issueDescription}>{issue.description}</Text>
-                </View>
-            ))}
         </View>
     );
 };

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../App";
 import {useSetRecoilState} from "recoil";
-import {userTokenState} from "../recoil/atom";
+import {userIdState, userTokenState} from "../recoil/atom";
 
 type LoginFormScreenProp = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
@@ -15,12 +15,14 @@ const LoginForm = ({ navigation }: LoginFormScreenProp) => {
     const [password, setPassword] = useState('');
 
     const setUserTokenValue = useSetRecoilState(userTokenState);
+    const setUserId = useSetRecoilState(userIdState);
 
     const handleLogin = async () => {
         try {
             const token = await postLogin(id, password);
             if (token) {
                 setUserTokenValue(token);
+                setUserId(id);
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'Main' }],

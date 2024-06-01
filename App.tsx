@@ -13,6 +13,7 @@ import PLPage from "./src/pages/PLPage";
 import DeveloperPage from "./src/pages/DeveloperPage";
 import TesterPage from "./src/pages/TesterPage";
 import CreateIssuePage from "./src/pages/CreateIssuePage";
+import CommentPage from "./src/pages/CommentPage";
 
 export type RootStackParamList = {
     Home: undefined;
@@ -24,6 +25,7 @@ export type RootStackParamList = {
     Developer: undefined;
     Tester: undefined;
     CreateIssue: undefined;
+    CommentPage: {issueId: number};
 };
 
 
@@ -53,6 +55,7 @@ export default function App() {
                     <Stack.Screen name="Developer" component={DeveloperPage} options={{title: ''}}/>
                     <Stack.Screen name="Tester" component={TesterPage} options={{title: ''}}/>
                     <Stack.Screen name="CreateIssue" component={CreateIssuePage} options={{title: ''}}/>
+                    <Stack.Screen name="CommentPage" component={CommentPage} />
                 </Stack.Navigator>
             </NavigationContainer>
         </RecoilRoot>

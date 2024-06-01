@@ -11,22 +11,14 @@ type DeveloperPageScreenProp = NativeStackScreenProps<RootStackParamList, 'Devel
 
 const DeveloperPage = ({ navigation }: DeveloperPageScreenProp) => {
     const project = useRecoilValue(projectState);
+    const id = project.id;
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{project.title}</Text>
+            <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
             <Text style={styles.sectionTitle}>Developers:</Text>
-            {project.dev.map(dev => (
-                <Text key={dev.id} style={styles.userText}>{dev.name} ({dev.email})</Text>
-            ))}
             <Text style={styles.sectionTitle}>Issues:</Text>
-            {project.issues.map(issue => (
-                <View key={issue.id} style={styles.issueContainer}>
-                    <Text style={styles.issueTitle}>{issue.title}</Text>
-                    <Text style={styles.issueDescription}>{issue.description}</Text>
-                </View>
-            ))}
         </View>
     );
 };
