@@ -5,8 +5,9 @@ import { RootStackParamList } from '../../App';
 import { Project } from '../types/project';
 import theme from '../style/theme';
 import {useRecoilValue} from "recoil";
-import {projectState, userTokenState} from "../recoil/atom";
+import {projectState, userIdState, userTokenState} from "../recoil/atom";
 import getAllIssueById from "../remotes/issue/getAllIssueById";
+import ConfirmPopup from "../popup/ConfirmPopup";
 
 type TesterPageScreenProp = NativeStackScreenProps<RootStackParamList, 'Tester'>;
 
@@ -31,7 +32,7 @@ export interface IssueBrowse {
     title: string;
     description: string;
     reporter: User;
-    status: 'NEW' | 'ASSIGNED' | 'RESOLVED' | 'CLOSED' | 'REOPENED';
+    status: 'NEW' | 'ASSIGNED' | 'RESOLVED' | 'CLOSED' | 'REOPENED' | 'FIXED';
     priority: 'BLOCKER' | 'CRITICAL' | 'MAJOR' | 'MINOR' | 'TRIVIAL';
     assignee: User;
     fixer: User;
@@ -43,37 +44,66 @@ export interface IssueBrowse {
 
 const TesterPage = ({ navigation }: TesterPageScreenProp) => {
     const project = useRecoilValue(projectState);
-    const userToken  = useRecoilValue(userTokenState);
+    const userToken = useRecoilValue(userTokenState);
+    const userId = useRecoilValue(userIdState); // Assuming userTokenState contains userId
     const id = project.id;
-    const [issues, setIssues] = useState<IssueBrowse[]>([])
+    const [issues, setIssues] = useState<IssueBrowse[]>([]);
+    const [showFixedIssues, setShowFixedIssues] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState<IssueBrowse | null>(null);
 
     useEffect(() => {
         const getIssues = async () => {
             const issueBrowse: IssueBrowse[] = await getAllIssueById(id, userToken);
             setIssues(issueBrowse);
-        }
+        };
 
         void getIssues();
-    }, []);
+    }, [id, userToken]);
 
-    const handleIssuePress = (issueId: number) => {
-        navigation.navigate('CommentPage', { issueId });
+    const handleShowFixedIssues = () => {
+        setShowFixedIssues(true);
     };
 
+    const handleShowAllIssues = () => {
+        setShowFixedIssues(false);
+    };
+
+    const handleIssuePress = (issue: IssueBrowse) => {
+        if (issue.status === 'FIXED' && issue.reporter.id === userId) {
+            setSelectedIssue(issue);
+        }
+    };
+
+    const handleClosePopup = () => {
+        setSelectedIssue(null);
+    };
+
+    const filteredIssues = showFixedIssues
+        ? issues.filter(issue => issue.status === 'FIXED' && issue.reporter.id === userId)
+        : issues;
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('CreateIssue')} style={styles.button}>
                 <Text style={styles.buttonText}>Create Issue</Text>
             </TouchableOpacity>
-            <Text style={styles.sectionTitle}>There are Issues</Text>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={handleShowFixedIssues} style={styles.button}>
+                    <Text style={styles.buttonText}>Show Fixed Issues</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleShowAllIssues} style={styles.button}>
+                    <Text style={styles.buttonText}>Show All Issues</Text>
+                </TouchableOpacity>
+            </View>
+            <Text style={styles.sectionTitle}>Issues</Text>
             <ScrollView>
-                {issues.map(issue => (
+                {filteredIssues.map(issue => (
                     <TouchableOpacity
                         key={issue.id}
                         style={styles.issueContainer}
-                        onPress={() => handleIssuePress(issue.id)}
+                        onPress={() => handleIssuePress(issue)}
                     >
                         <Text style={styles.issueTitle}>{issue.title}</Text>
                         <Text style={styles.issueDescription}>{issue.description}</Text>
@@ -82,7 +112,16 @@ const TesterPage = ({ navigation }: TesterPageScreenProp) => {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-        </View>
+
+            {selectedIssue && (
+                <ConfirmPopup
+                    visible={!!selectedIssue}
+                    onClose={handleClosePopup}
+                    issue={selectedIssue}
+                    userToken={userToken}
+                />
+            )}
+        </ScrollView>
     );
 };
 
@@ -108,6 +147,11 @@ const styles = StyleSheet.create({
         color: theme.color.white,
         marginTop: 16,
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
     issueContainer: {
         marginTop: 8,
         padding: 8,
@@ -131,6 +175,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         marginVertical: 8,
+        flex: 1,
+        height: 40,
+        marginHorizontal: 4,
     },
     buttonText: {
         color: 'white',

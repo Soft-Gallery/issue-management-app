@@ -5,9 +5,10 @@ import { RootStackParamList } from '../../App';
 import theme from '../style/theme';
 import { useRecoilValue } from 'recoil';
 import { projectState, userTokenState } from '../recoil/atom';
-import { IssueBrowse } from "./TesterPage";
-import getAllIssueById from "../remotes/issue/getAllIssueById";
-import AssignDeveloperPopup from "../popup/AssignDeveloperPopup";
+import { IssueBrowse } from './TesterPage';
+import getAllIssueById from '../remotes/issue/getAllIssueById';
+import AssignDeveloperPopup from '../popup/AssignDeveloperPopup';
+import ConfirmClosePopup from "../popup/ConfirmClosePopup";
 
 type PLPageScreenProp = NativeStackScreenProps<RootStackParamList, 'PL'>;
 
@@ -16,8 +17,10 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
     const userToken = useRecoilValue(userTokenState);
     const id = project.id;
     const [issues, setIssues] = useState<IssueBrowse[]>([]);
-    const [showNewIssues, setShowNewIssues] = useState(false);
+    const [showNewIssues, setShowNewIssues] = useState(true); // Initial state to show new issues
+    const [showResolvedIssues, setShowResolvedIssues] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState<IssueBrowse | null>(null);
+    const [popupType, setPopupType] = useState<'assign' | 'close' | null>(null);
 
     useEffect(() => {
         const getIssues = async () => {
@@ -26,43 +29,63 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
         };
 
         void getIssues();
-    }, []);
+    }, [id, userToken]);
 
     const handleIssuePress = (issue: IssueBrowse) => {
         if (issue.status === 'NEW') {
+            setPopupType('assign');
+            setSelectedIssue(issue);
+        } else if (issue.status === 'RESOLVED') {
+            setPopupType('close');
             setSelectedIssue(issue);
         }
     };
 
     const handleShowNewIssues = () => {
         setShowNewIssues(true);
+        setShowResolvedIssues(false);
+    };
+
+    const handleShowResolvedIssues = () => {
+        setShowResolvedIssues(true);
+        setShowNewIssues(false);
     };
 
     const handleShowAllIssues = () => {
         setShowNewIssues(false);
+        setShowResolvedIssues(false);
     };
 
     const handleClosePopup = () => {
         setSelectedIssue(null);
+        setPopupType(null);
     };
 
-    const filteredIssues = showNewIssues ? issues.filter(issue => issue.status === 'NEW') : issues;
+    const filteredIssues = showNewIssues
+        ? issues.filter(issue => issue.status === 'NEW')
+        : showResolvedIssues
+            ? issues.filter(issue => issue.status === 'RESOLVED')
+            : issues;
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
-            <Text style={styles.sectionTitle}>There are Issues</Text>
-
+            <TouchableOpacity onPress={() => navigation.navigate('CreateIssue')} style={styles.button}>
+                <Text style={styles.buttonText}>Create Issue</Text>
+            </TouchableOpacity>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleShowNewIssues} style={styles.button}>
-                    <Text style={styles.buttonText}>Show New Issues</Text>
+                    <Text style={styles.buttonText}>New</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleShowResolvedIssues} style={styles.button}>
+                    <Text style={styles.buttonText}>Resolved</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleShowAllIssues} style={styles.button}>
-                    <Text style={styles.buttonText}>Show All Issues</Text>
+                    <Text style={styles.buttonText}>All</Text>
                 </TouchableOpacity>
             </View>
-
+            <Text style={styles.sectionTitle}>Issues</Text>
             <ScrollView>
                 {filteredIssues.map(issue => (
                     <TouchableOpacity
@@ -78,7 +101,7 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
                 ))}
             </ScrollView>
 
-            {selectedIssue && (
+            {selectedIssue && popupType === 'assign' && (
                 <AssignDeveloperPopup
                     visible={!!selectedIssue}
                     onClose={handleClosePopup}
@@ -87,7 +110,16 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
                     userToken={userToken}
                 />
             )}
-        </View>
+
+            {selectedIssue && popupType === 'close' && (
+                <ConfirmClosePopup
+                    visible={!!selectedIssue}
+                    onClose={handleClosePopup}
+                    issue={selectedIssue}
+                    userToken={userToken}
+                />
+            )}
+        </ScrollView>
     );
 };
 
@@ -142,6 +174,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 8,
         flex: 1,
+        height: 40,
         marginHorizontal: 4,
     },
     buttonText: {

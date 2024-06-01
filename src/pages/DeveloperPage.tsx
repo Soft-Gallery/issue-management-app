@@ -38,7 +38,7 @@ const DeveloperPage = ({ navigation }: DeveloperPageScreenProp) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
             <Text style={styles.sectionTitle}>Assigned Issues:</Text>
@@ -65,7 +65,7 @@ const DeveloperPage = ({ navigation }: DeveloperPageScreenProp) => {
                     userToken={userToken}
                 />
             )}
-        </View>
+        </ScrollView>
     );
 };
 
