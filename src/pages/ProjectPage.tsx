@@ -10,24 +10,15 @@ import {projectsState, projectState, userRoleState} from "../recoil/atom";
 import {useNavigation} from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 
-const ProjectPage = () => {
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    const userRole = useRecoilValue(userRoleState);
+interface ProjectPageProps {
+    navigate: () => void;
+}
+const ProjectPage = ({ navigate }: ProjectPageProps) => {
     const [selectedProject, setSelectedProject] = useRecoilState(projectState);
 
     const handleProjectSelect = (project: Project) => {
         setSelectedProject(project);
-        navigateToRolePage();
-    };
-
-    const navigateToRolePage = () => {
-        if (userRole === 'ROLE_PL') {
-            navigation.navigate('PL');
-        } else if (userRole === 'ROLE_DEVELOPER') {
-            navigation.navigate('Developer');
-        } else if (userRole === 'ROLE_TESTER') {
-            navigation.navigate('Tester');
-        }
+        navigate();
     };
 
     return (

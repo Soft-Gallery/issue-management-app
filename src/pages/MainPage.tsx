@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import theme from '../style/theme';
-import { useRecoilValue } from 'recoil';
-import { userTokenState } from "../recoil/atom";
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {userRoleState, userTokenState} from "../recoil/atom";
 import { getUserInfo } from '../remotes/auth/getUserInfo';
 import { UserRole, UserWithRole } from '../types/user';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App';
 import AdminPage from "./AdminPage";
 import ProjectPage from "./ProjectPage";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../../App";
 
-const MainPage = () => {
+type MainScreenProp = NativeStackScreenProps<RootStackParamList, 'Main'>;
+
+const MainPage = ({ navigation }: MainScreenProp) => {
     const userTokenValue = useRecoilValue(userTokenState);
+    const [userRole, setUserRole] = useRecoilState(userRoleState);
     const [userInfo, setUserInfo] = useState<UserWithRole<UserRole> | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const navigateToRolePage = () => {
+        if (userRole === 'ROLE_PL') {
+            navigation.navigate('PL');
+        } else if (userRole === 'ROLE_DEVELOPER') {
+            navigation.navigate('Developer');
+        } else if (userRole === 'ROLE_TESTER') {
+            navigation.navigate('Tester');
+        } else {
+            console.log("안녕");
+        }
+    };
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
                 const userInfoValue = await getUserInfo(userTokenValue);
                 setUserInfo(userInfoValue);
+                setUserRole(userInfoValue.role);
                 console.log(userInfoValue);
             } catch (err) {
                 console.log(err);
@@ -54,7 +70,7 @@ const MainPage = () => {
         <View style={styles.container}>
             {userInfo.role === 'ROLE_ADMIN' && <AdminPage />}
             {['ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'].includes(userInfo.role) && (
-                <ProjectPage />
+                <ProjectPage navigate={navigateToRolePage} />
             )}
         </View>
     );

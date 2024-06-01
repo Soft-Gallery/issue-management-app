@@ -18,7 +18,7 @@ export type RootStackParamList = {
     Login: undefined;
     SignUp: undefined;
     Main: undefined;
-    Project: { userRole: string };
+    Project: undefined;
     PL: undefined;
     Developer: undefined;
     Tester: undefined;
@@ -47,7 +47,6 @@ export default function App() {
                     <Stack.Screen name="Login" component={LoginForm} options={{ title: '로그인' }} />
                     <Stack.Screen name="SignUp" component={SignUpForm} options={{ title: '회원가입' }} />
                     <Stack.Screen name="Main" component={MainPage} options={{title: ''}} />
-                    <Stack.Screen name="Project" component={ProjectPage} options={{title: ''}}/>
                     <Stack.Screen name="PL" component={PLPage} options={{title: ''}}/>
                     <Stack.Screen name="Developer" component={DeveloperPage} options={{title: ''}}/>
                     <Stack.Screen name="Tester" component={TesterPage} options={{title: ''}}/>

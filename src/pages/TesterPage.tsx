@@ -7,7 +7,9 @@ import theme from '../style/theme';
 import {useRecoilValue} from "recoil";
 import {projectState} from "../recoil/atom";
 
-const TesterPage = () => {
+type TesterPageScreenProp = NativeStackScreenProps<RootStackParamList, 'Tester'>;
+
+const TesterPage = ({ navigation }: TesterPageScreenProp) => {
     const project = useRecoilValue(projectState);
 
     return (

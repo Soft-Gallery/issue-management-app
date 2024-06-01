@@ -6,7 +6,9 @@ import theme from '../style/theme';
 import {useRecoilValue} from "recoil";
 import {projectState} from "../recoil/atom";
 
-const PLPage = () => {
+type PLPageScreenProp = NativeStackScreenProps<RootStackParamList, 'PL'>;
+
+const PLPage = ({ navigation }: PLPageScreenProp) => {
     const project = useRecoilValue(projectState);
 
     return (
