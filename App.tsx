@@ -14,6 +14,7 @@ import DeveloperPage from "./src/pages/DeveloperPage";
 import TesterPage from "./src/pages/TesterPage";
 import CreateIssuePage from "./src/pages/CreateIssuePage";
 import CommentPage from "./src/pages/CommentPage";
+import StatisticPage from "./src/pages/StatisticPage";
 
 export type RootStackParamList = {
     Home: undefined;
@@ -26,6 +27,7 @@ export type RootStackParamList = {
     Tester: undefined;
     CreateIssue: undefined;
     CommentPage: {issueId: number};
+    StatisticPage: undefined;
 };
 
 
@@ -56,6 +58,7 @@ export default function App() {
                     <Stack.Screen name="Tester" component={TesterPage} options={{title: ''}}/>
                     <Stack.Screen name="CreateIssue" component={CreateIssuePage} options={{title: ''}}/>
                     <Stack.Screen name="CommentPage" component={CommentPage} />
+                    <Stack.Screen name="StatisticPage" component={StatisticPage} />
                 </Stack.Navigator>
             </NavigationContainer>
         </RecoilRoot>

@@ -4,9 +4,7 @@ import theme from '../style/theme';
 import getMemberByProjectIdByRole from "../remotes/member/getMemberProjectById";
 import postComment from "../remotes/comment/postComment";
 import assignDev from "../remotes/issue/assignDev";
-// import getDevelopersByProjectId from '../remotes/user/getDevelopersByProjectId'; // Assume this function fetches the developers
-// import addCommentToIssue from '../remotes/issue/addCommentToIssue';
-// import assignIssueToDeveloper from '../remotes/issue/assignIssueToDeveloper';
+import getGPT from "../remotes/gpt/getGPT";
 
 interface AssignDeveloperProps {
     visible: boolean;
@@ -17,17 +15,18 @@ interface AssignDeveloperProps {
 }
 
 interface Devs {
-    id: string,
-    name: string,
-    email: string,
-    password: string,
-    role: string,
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    role: string;
 }
 
 const AssignDeveloperPopup = ({ visible, onClose, issueId, projectId, userToken }: AssignDeveloperProps) => {
     const [developers, setDevelopers] = useState<Devs[]>([]);
     const [selectedDeveloper, setSelectedDeveloper] = useState<Devs>();
     const [comment, setComment] = useState('');
+    const [gptAnalysis, setGptAnalysis] = useState<{ reason: string; answer: string } | null>(null);
 
     useEffect(() => {
         if (visible) {
@@ -48,6 +47,11 @@ const AssignDeveloperPopup = ({ visible, onClose, issueId, projectId, userToken 
         }
     };
 
+    const handleGptAnalysis = async () => {
+        const analysis = await getGPT(issueId, userToken);
+        setGptAnalysis(analysis);
+    };
+
     return (
         <Modal visible={visible} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
@@ -66,13 +70,23 @@ const AssignDeveloperPopup = ({ visible, onClose, issueId, projectId, userToken 
                                 <Text style={styles.developerName}>{developer.name}</Text>
                             </TouchableOpacity>
                         ))}
+                        <TextInput
+                            style={styles.commentInput}
+                            placeholder="Add a comment"
+                            value={comment}
+                            onChangeText={setComment}
+                        />
+                        <TouchableOpacity onPress={handleGptAnalysis} style={styles.analysisButton}>
+                            <Text style={styles.analysisButtonText}>GPT Analysis</Text>
+                        </TouchableOpacity>
+                        {gptAnalysis && (
+                            <View style={styles.analysisContainer}>
+                                <Text style={styles.analysisTitle}>GPT Analysis Result:</Text>
+                                <Text style={styles.analysisReason}>{gptAnalysis.reason}</Text>
+                                <Text style={styles.analysisAnswer}>Recommended Developer: {gptAnalysis.answer}</Text>
+                            </View>
+                        )}
                     </ScrollView>
-                    <TextInput
-                        style={styles.commentInput}
-                        placeholder="Add a comment"
-                        value={comment}
-                        onChangeText={setComment}
-                    />
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity onPress={handleAssign} style={styles.button}>
                             <Text style={styles.buttonText}>Confirm</Text>
@@ -99,6 +113,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.color.background,
         borderRadius: 8,
         padding: 16,
+        maxHeight: '80%',
     },
     title: {
         fontSize: 20,
@@ -128,9 +143,42 @@ const styles = StyleSheet.create({
         marginTop: 8,
         marginBottom: 16,
     },
+    analysisButton: {
+        backgroundColor: theme.color.sub,
+        padding: 12,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginVertical: 8,
+    },
+    analysisButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    analysisContainer: {
+        marginTop: 16,
+        padding: 12,
+        backgroundColor: theme.color.gray2,
+        borderRadius: 8,
+    },
+    analysisTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: theme.color.white,
+        marginBottom: 8,
+    },
+    analysisReason: {
+        fontSize: 14,
+        color: theme.color.white,
+        marginBottom: 8,
+    },
+    analysisAnswer: {
+        fontSize: 16,
+        color: theme.color.main,
+    },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginTop: 16,
     },
     button: {
         backgroundColor: theme.color.main,

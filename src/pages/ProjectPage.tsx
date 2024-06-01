@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     projectButton: {
         padding: 16,
-        height: 160,
+        height: 80,
         borderWidth: 1,
         borderColor: theme.color.gray3,
         borderRadius: 8,

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, Modal, FlatList } from 'react-native';
 import theme from "../style/theme";
+import postSignUp from "../remotes/auth/signUp";
 
 const SignUpForm = () => {
+    const [id, setId] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -32,31 +34,8 @@ const SignUpForm = () => {
         return re.test(id);
     };
 
-    const handleSignUp = () => {
-        if (!validateID(username)) {
-            Alert.alert('Error', '아이디는 영문+숫자 4~8자리여야 합니다.');
-            return;
-        }
-        if (!validateEmail(email)) {
-            Alert.alert('Error', '유효한 이메일 주소를 입력해주세요.');
-            return;
-        }
-        if (!validatePassword(password)) {
-            Alert.alert('Error', '비밀번호는 영문+숫자 8~16자리여야 합니다.');
-            return;
-        }
-        if (password !== confirmPassword) {
-            Alert.alert('Error', '비밀번호가 일치하지 않습니다.');
-            return;
-        }
-        if (!validateUsername(username)) {
-            Alert.alert('Error', '사용자 이름은 영문 20자 이내여야 합니다.');
-            return;
-        }
-        console.log('Email:', email);
-        console.log('Password:', password);
-        console.log('Username:', username);
-        console.log('Role:', role);
+    const handleSignUp = async () => {
+        await postSignUp(id, username, email, password, role);
     };
 
     const renderRoleItem = ({ item }: { item: string }) => (
@@ -81,6 +60,14 @@ const SignUpForm = () => {
             <TextInput
                 style={styles.input}
                 placeholder="아이디"
+                value={id}
+                onChangeText={setId}
+                maxLength={8}
+                placeholderTextColor={theme.color.gray3}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="이름"
                 value={username}
                 onChangeText={setUsername}
                 maxLength={8}
@@ -144,7 +131,6 @@ const SignUpForm = () => {
             <TouchableOpacity
                 onPress={handleSignUp}
                 style={styles.button}
-                disabled={!validateID(username) || !validateEmail(email) || !validatePassword(password) || password !== confirmPassword || !validateUsername(username)}
             >
                 <Text style={styles.buttonText}>회원가입 하기</Text>
             </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import theme from '../style/theme';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {userIdState, userRoleState, userTokenState} from "../recoil/atom";
@@ -30,6 +30,10 @@ const MainPage = ({ navigation }: MainScreenProp) => {
             console.log("안녕");
         }
     };
+
+    const navigateToStaticticPage = () => {
+        navigation.navigate('StatisticPage');
+    }
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -74,6 +78,12 @@ const MainPage = ({ navigation }: MainScreenProp) => {
             {['ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'].includes(userInfo.role) && (
                 <ProjectPage navigate={navigateToRolePage} />
             )}
+            <TouchableOpacity
+                onPress={navigateToStaticticPage}
+                style={styles.button}
+            >
+                <Text style={styles.buttonText}>통계 보기</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -93,6 +103,17 @@ const styles = StyleSheet.create({
     loadingText: {
         color: theme.color.gray6,
         fontSize: 18,
+    },
+    button: {
+        backgroundColor: theme.color.main,
+        padding: 12,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: theme.color.white,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
