@@ -2,7 +2,7 @@ import axios, { CreateAxiosDefaults } from 'axios';
 import { REACT_APP_SERVER_URL } from '@env';
 
 const defaultConfig: CreateAxiosDefaults = {
-    baseURL: 'http://3.230.242.105:8080/',
+    baseURL: 'https://b212c51a2452.ngrok.app',
 };
 
 const client = axios.create(defaultConfig);
