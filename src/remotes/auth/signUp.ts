@@ -8,7 +8,7 @@ interface UserAccountType {
     role: string,
 }
 
-export default function postSignUp(id: string, password: string, name: string, email: string, role: string) {
+export default function postSignUp(id: string, name: string, email: string, password: string, role: string) {
 
     const userData = {
         "id": id,

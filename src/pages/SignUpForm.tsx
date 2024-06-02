@@ -15,11 +15,21 @@ const SignUpForm = () => {
     const roles = ['ROLE_ADMIN', 'ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'];
 
     const handleSignUp = async () => {
-        await postSignUp(id, username, email, password, role);
-        Alert.alert('Success', 'Account created successfully');
+        console.log(password);
+        if (password !== confirmPassword) {
+            Alert.alert('Error', 'Passwords do not match');
+            return;
+        }
+
+        try {
+            await postSignUp(id, username, email, password, role);
+            Alert.alert('Success', 'Account created successfully');
+        } catch (error) {
+            Alert.alert('Error', 'Failed to create account');
+        }
     };
 
-    const renderRoleItem = ({ item }: { item: string }) => (
+    const renderRoleItem = ({ item }) => (
         <TouchableOpacity
             onPress={() => {
                 setRole(item);
@@ -63,7 +73,6 @@ const SignUpForm = () => {
                 placeholder="비밀번호"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry={true}
                 placeholderTextColor={theme.color.gray3}
             />
             <TextInput
@@ -71,7 +80,6 @@ const SignUpForm = () => {
                 placeholder="비밀번호 확인"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry={true}
                 placeholderTextColor={theme.color.gray3}
             />
             <TouchableOpacity
@@ -209,4 +217,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpForm;
-
