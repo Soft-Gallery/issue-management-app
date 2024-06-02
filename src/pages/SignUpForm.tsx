@@ -9,30 +9,10 @@ const SignUpForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [role, setRole] = useState('ADMIN');
+    const [role, setRole] = useState('ROLE_ADMIN');
     const [modalVisible, setModalVisible] = useState(false);
 
     const roles = ['ROLE_ADMIN', 'ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'];
-
-    const validateEmail = (email: string) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    };
-
-    const validateUsername = (username: string) => {
-        const re = /^[a-zA-Z]{1,20}$/;
-        return re.test(username);
-    };
-
-    const validatePassword = (password: string) => {
-        const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
-        return re.test(password);
-    };
-
-    const validateID = (id: string) => {
-        const re = /^[a-zA-Z0-9]{4,8}$/;
-        return re.test(id);
-    };
 
     const handleSignUp = async () => {
         await postSignUp(id, username, email, password, role);
