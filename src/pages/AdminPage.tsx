@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ProjectCreationPage from './ProjectCreationPage';
-import theme from "../style/theme";
-import {WINDOW_WIDTH} from "../const/window";
+import ProjectListPage from './ProjectListPage';
 import AddMemberPage from "./AddMemberPage";
-import {useRecoilValue} from "recoil";
-import {projectCreateState} from "../recoil/atom";  // Import the ProjectCreationPage component
+import theme from "../style/theme";
+import { WINDOW_WIDTH } from "../const/window";
+import { useRecoilValue } from "recoil";
+import { projectCreateState } from "../recoil/atom";
 
 const AdminPage = () => {
     const createStep = useRecoilValue(projectCreateState);
@@ -17,11 +18,12 @@ const AdminPage = () => {
             <TouchableOpacity onPress={() => setView('create')} style={styles.button}>
                 <Text style={styles.buttonText}>Create Project</Text>
             </TouchableOpacity>
-            {/*<TouchableOpacity onPress={() => setView('list')} style={styles.button}>*/}
-            {/*    <Text style={styles.buttonText}>View Projects</Text>*/}
-            {/*</TouchableOpacity>*/}
+            <TouchableOpacity onPress={() => setView('list')} style={styles.button}>
+                <Text style={styles.buttonText}>View Projects</Text>
+            </TouchableOpacity>
             {view === 'create' && createStep === 1 && <ProjectCreationPage />}
             {view === 'create' && createStep === 2 && <AddMemberPage />}
+            {view === 'list' && <ProjectListPage />}
         </View>
     );
 };
@@ -53,3 +55,4 @@ const styles = StyleSheet.create({
 });
 
 export default AdminPage;
+
