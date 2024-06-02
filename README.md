@@ -2,6 +2,7 @@
 
 - 해당 레포지터리는, 2024년 중앙대학교 소프트웨어학부 소프트웨어공학 팀 과제를 위해 제작되었습니다.
 - 주요 기술은, React Native, ESLint, git, Prettier, TypeScript이며 실행 가능 OS는 Andriod, Ios입니다.
+- 배포된 서버가 아닌, ngrok 서버를 작동시켜야 실행되는 어플리케이션입니다.
 
 # 주요 기능 소개
 - 해당 과제는, MUST 포함 기능들이 서술되어있으며, 이에 대한 정보는 보고서 및 다음 README 파일에서 확인 가능합니다.
@@ -42,4 +43,38 @@
 
 <img src="https://github.com/Soft-Gallery/issue-management-app/assets/71542970/dd192a62-20af-42bb-bffa-7104005eafda" alt="이슈 화면" width="400"/>
 
+# 예제 시나리오
 
+## 어드민의 프로젝트 생성
+
+1. 어드민 계정으로 로그인 후, Create Project를 누른다면 첫 번째로, 프로젝트의 타이틀과 설명을 작성할 수 있습니다.
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/50364470-e005-47c8-ae48-01ce512e829a)
+
+2. 이후, 해당 프로젝트에 PL, DEV, TESTER로 지정할 사람들을 선택한 후에, Confirm Members 버튼을 누르면, 멤버가 할당된 프로젝트 생성이 완료됩니다.
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/74252571-6050-4ca3-a089-28ee017c1b09)
+
+## 테스터의 이슈 생성
+
+1. 테스터 계정으로 접속시, 본인에게 할당된 프로젝트를 선택하여 화면 이동이 가능합니다.
+   ![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/26e8be73-b08c-4248-99b2-fd2c4f0ef1a1)
+2. 해당 페이지에서는, 프로젝트 내에서의 이슈를 브라우징할 수 있으며, 이슈를 생성할 수 있습니다.
+   ![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/b4197ce0-94b9-494b-b074-1e368c065b62)
+3. 이슈를 생성하는 버튼을 누르면, 타이틀, 설명, 그리고 초기 코멘트를 작성하여 이슈를 생성할 수 있고, 해당 이슈의 reporter는 이 이슈를 생성한 tester의 id가 됩니다.
+    ![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/1658ea7c-a0a2-4d45-beee-3ddf0a062bd2)
+
+
+## PL의 이슈 브라우징 및 담당자 지정 && 담당자 추천
+
+1. PL은, 현재 'New', 'Resolved', 'Closed', 'All'상태인 이슈들을 각각 브라우징하여 검색할 수 있습니다.
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/1f4ff49b-3db3-400b-9ab1-a2b8622ce337)
+2. PL은, 'NEW'탭에서 NEW 상태인 이슈를 누르면, 해당 이슈에 대해서 개발자를 배정할 수 있습니다.
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/96a5e177-f540-4e1a-91b6-bb9245dd9d5d)
+3. 이때, 어떤 개발자가 이 프로젝트에 적절하게 배정할지 판단을 인공지능에게 맞춰서 제공받고 싶다면 GPT Analysis를 눌러서, 추천을 받을 수 있습니다.
+   ![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/c848878a-9876-4833-ac69-02bce5bf5b66)
+4. 이때, 개발자를 선택하고 이슈에 대해서 코멘트를 작성하면, 개발자가 이 이슈에 할당되고, 개발자는 자신에게 할당된 이슈를 확인할 수 있게 됩니다.
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/94ef022d-13be-42fb-872c-eaaf1c4e0ef2)
+
+## DEV의 자신에게 assign된 이슈 브라우징 및, 코멘트 + issue 상태 fix
+
+1. 개발자는 로그인 시에, 자신에게 assign된 이슈를 확인할 수 있습니다.
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/2ab40eba-5747-483a-b415-e842337ab38e)
