@@ -9,6 +9,7 @@ import { IssueBrowse } from './TesterPage';
 import getAllIssueById from '../remotes/issue/getAllIssueById';
 import AssignDeveloperPopup from '../popup/AssignDeveloperPopup';
 import ConfirmClosePopup from "../popup/ConfirmClosePopup";
+import ReopenIssuePopup from "../popup/ReopenIssuePopup"; // Import the ReopenIssuePopup component
 
 type PLPageScreenProp = NativeStackScreenProps<RootStackParamList, 'PL'>;
 
@@ -19,8 +20,9 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
     const [issues, setIssues] = useState<IssueBrowse[]>([]);
     const [showNewIssues, setShowNewIssues] = useState(true); // Initial state to show new issues
     const [showResolvedIssues, setShowResolvedIssues] = useState(false);
+    const [showClosedIssues, setShowClosedIssues] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState<IssueBrowse | null>(null);
-    const [popupType, setPopupType] = useState<'assign' | 'close' | null>(null);
+    const [popupType, setPopupType] = useState<'assign' | 'close' | 'reopen' | null>(null);
 
     useEffect(() => {
         const getIssues = async () => {
@@ -38,22 +40,34 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
         } else if (issue.status === 'RESOLVED') {
             setPopupType('close');
             setSelectedIssue(issue);
+        } else if (issue.status === 'CLOSED') {
+            setPopupType('reopen');
+            setSelectedIssue(issue);
         }
     };
 
     const handleShowNewIssues = () => {
         setShowNewIssues(true);
         setShowResolvedIssues(false);
+        setShowClosedIssues(false);
     };
 
     const handleShowResolvedIssues = () => {
         setShowResolvedIssues(true);
         setShowNewIssues(false);
+        setShowClosedIssues(false);
+    };
+
+    const handleShowClosedIssues = () => {
+        setShowClosedIssues(true);
+        setShowNewIssues(false);
+        setShowResolvedIssues(false);
     };
 
     const handleShowAllIssues = () => {
         setShowNewIssues(false);
         setShowResolvedIssues(false);
+        setShowClosedIssues(false);
     };
 
     const handleClosePopup = () => {
@@ -65,7 +79,9 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
         ? issues.filter(issue => issue.status === 'NEW')
         : showResolvedIssues
             ? issues.filter(issue => issue.status === 'RESOLVED')
-            : issues;
+            : showClosedIssues
+                ? issues.filter(issue => issue.status === 'CLOSED')
+                : issues;
 
     return (
         <ScrollView style={styles.container}>
@@ -80,6 +96,9 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleShowResolvedIssues} style={styles.button}>
                     <Text style={styles.buttonText}>Resolved</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleShowClosedIssues} style={styles.button}>
+                    <Text style={styles.buttonText}>Closed</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleShowAllIssues} style={styles.button}>
                     <Text style={styles.buttonText}>All</Text>
@@ -113,6 +132,15 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
 
             {selectedIssue && popupType === 'close' && (
                 <ConfirmClosePopup
+                    visible={!!selectedIssue}
+                    onClose={handleClosePopup}
+                    issue={selectedIssue}
+                    userToken={userToken}
+                />
+            )}
+
+            {selectedIssue && popupType === 'reopen' && (
+                <ReopenIssuePopup
                     visible={!!selectedIssue}
                     onClose={handleClosePopup}
                     issue={selectedIssue}
