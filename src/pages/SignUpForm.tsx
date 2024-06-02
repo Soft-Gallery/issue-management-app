@@ -12,7 +12,7 @@ const SignUpForm = () => {
     const [role, setRole] = useState('ADMIN');
     const [modalVisible, setModalVisible] = useState(false);
 
-    const roles = ['ADMIN', 'PL', 'DEV', 'TESTER'];
+    const roles = ['ROLE_ADMIN', 'ROLE_PL', 'ROLE_DEVELOPER', 'ROLE_TESTER'];
 
     const validateEmail = (email: string) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,10 +49,6 @@ const SignUpForm = () => {
             <Text style={styles.modalItemText}>{item}</Text>
         </TouchableOpacity>
     );
-
-    const renderPasswordText = (text: string) => {
-        return '*'.repeat(text.length);
-    };
 
     return (
         <View style={styles.container}>
