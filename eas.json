@@ -3,12 +3,18 @@
     "version": ">= 7.3.0"
   },
   "build": {
+    "base": {
+      "android": {
+        "image": "default"
+      }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "preview"
     },
     "production": {}
   },
@@ -16,3 +22,4 @@
     "production": {}
   }
 }
+

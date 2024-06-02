@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "issue-management-app",
-    "slug": "issue-management-app",
+    "slug": "panda",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,9 +10,6 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
@@ -32,8 +29,15 @@
     },
     "extra": {
       "eas": {
-        "projectId": "be1166bc-6abd-4098-b9ec-a00fc30692e7"
+        "projectId": "69781a1e-1fce-4b28-957c-751720dec30c"
       }
+    },
+    "owner": "pandasoftwareeng",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/69781a1e-1fce-4b28-957c-751720dec30c"
     }
   }
 }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import theme from "../style/theme";
 import postLogin from "../remotes/auth/postLogin";
-import { useNavigation } from '@react-navigation/native';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../../App";
 import {useSetRecoilState} from "recoil";

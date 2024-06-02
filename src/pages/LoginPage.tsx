@@ -18,13 +18,13 @@ const LoginPage = ({ navigation }: LoginScreenProp) => {
                 onPress={() => navigation.navigate('Login')}
                 style={styles.socialButton}
             >
-              <Text style={styles.socialText}>로그인 하기</Text>
+              <Text style={styles.socialText}>로그인!</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => navigation.navigate('SignUp')}
                 style={styles.socialButton}
             >
-              <Text style={styles.socialText}>회원가입 하기</Text>
+              <Text style={styles.socialText}>회원가입!</Text>
             </TouchableOpacity>
           </View>
         </View>
