@@ -16,6 +16,7 @@ const SignUpForm = () => {
 
     const handleSignUp = async () => {
         await postSignUp(id, username, email, password, role);
+        Alert.alert('Success', 'Account created successfully');
     };
 
     const renderRoleItem = ({ item }: { item: string }) => (
