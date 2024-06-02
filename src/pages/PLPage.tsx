@@ -87,9 +87,6 @@ const PLPage = ({ navigation }: PLPageScreenProp) => {
         <ScrollView style={styles.container}>
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.description}>{project.description}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('CreateIssue')} style={styles.button}>
-                <Text style={styles.buttonText}>Create Issue</Text>
-            </TouchableOpacity>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleShowNewIssues} style={styles.button}>
                     <Text style={styles.buttonText}>New</Text>
