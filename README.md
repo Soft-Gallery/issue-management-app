@@ -3,11 +3,12 @@
 - 해당 레포지터리는, 2024년 중앙대학교 소프트웨어학부 소프트웨어공학 팀 과제를 위해 제작되었습니다.
 - 주요 기술은, React Native, ESLint, git, Prettier, TypeScript이며 실행 가능 OS는 Andriod, Ios입니다.
 - 배포된 서버가 아닌, ngrok 서버를 작동시켜야 실행되는 어플리케이션입니다.
+- 팀 관련된 구체적인 설명은, frontEnd 레포를 확인해주시길 바라겠습니다.
 
 # 어플리케이션 구현 방법
 - React Native && TypeScript를 사용하였으며, Expo-Cli프로젝트를 구현하여, 빠른 배포를 목표로 제작되었습니다.
 - 어플리케이션의 주요 로직은, src 폴더 내에, 기능 별로 구분되어있으며, 도메인에 맞춰 pages가 제작되어있습니다.
-- 
+
 ![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/b7248cc5-501f-4a31-b0ad-0b35646b3f7b)
 
 다음과 같은 기술이 사용되었습니다.
