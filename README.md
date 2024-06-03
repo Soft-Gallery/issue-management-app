@@ -4,6 +4,43 @@
 - 주요 기술은, React Native, ESLint, git, Prettier, TypeScript이며 실행 가능 OS는 Andriod, Ios입니다.
 - 배포된 서버가 아닌, ngrok 서버를 작동시켜야 실행되는 어플리케이션입니다.
 
+# 어플리케이션 구현 방법
+- React Native && TypeScript를 사용하였으며, Expo-Cli프로젝트를 구현하여, 빠른 배포를 목표로 제작되었습니다.
+- 어플리케이션의 주요 로직은, src 폴더 내에, 기능 별로 구분되어있으며, 도메인에 맞춰 pages가 제작되어있습니다.
+- 
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/b7248cc5-501f-4a31-b0ad-0b35646b3f7b)
+
+다음과 같은 기술이 사용되었습니다.
+## TypeScript
+TypeScript는 JavaScript의 상위 집합으로, 정적 타입을 추가하여 코드의 품질과 유지보수성을 향상시킵니다. 타입 안전성을 제공하여 코드 작성 시 오류를 사전에 방지하고, 코드의 가독성과 유지보수성을 높입니다.
+
+## ESLint
+ESLint는 JavaScript와 TypeScript 코드에서 문제를 식별하고 수정할 수 있도록 도와주는 린터입니다. 일관된 코드 스타일을 유지하고, 잠재적인 오류를 사전에 방지하여 코드 품질을 향상시킵니다. Prettier는 코드 포매터로, 코드 스타일을 일관되게 유지하여 가독성을 높이고 팀 간의 코드 스타일 불일치를 방지합니다.
+
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/59b0ebbb-d371-4897-bf83-761b7d7eb901)
+
+## Recoil
+Recoil은 React 상태 관리 라이브러리로, 글로벌 상태를 쉽게 관리하고 업데이트할 수 있도록 도와줍니다. 복잡한 상태 관리를 단순화하고, React 컴포넌트 간의 상태 공유를 용이하게 합니다.
+
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/b4f35a50-7996-4050-bfc1-9a55466fed0e)
+
+## Axios
+Axios는 HTTP 클라이언트 라이브러리로, API 요청을 쉽게 처리할 수 있게 해줍니다. 간단하고 직관적인 API를 제공하여 비동기 HTTP 요청을 관리하고, 응답을 처리하는 과정을 간소화합니다.
+
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/df5cf45e-505e-4656-8da0-8c253a2c9f07)
+
+
+## EAS
+EAS(Expo Application Services)는 Expo에서 제공하는 배포 도구로, 빌드 및 배포 과정을 자동화하여 애플리케이션을 신속하게 배포할 수 있게 해줍니다. 이를 통해 개발자는 빌드 및 배포에 소요되는 시간을 절약하고, 개발에 집중할 수 있습니다.
+
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/b91c8671-2969-428e-ac31-099f86c9048e)
+
+## Babel
+Babel은 JavaScript 트랜스파일러로, 최신 JavaScript 문법을 구버전 브라우저에서도 호환되도록 변환해줍니다. 이를 통해 최신 언어 기능을 사용하면서도 다양한 환경에서 코드가 정상적으로 작동하도록 합니다.
+
+![image](https://github.com/Soft-Gallery/issue-management-app/assets/71542970/332aed26-37f6-43d5-be2b-2d63d442ab0c)
+
+
 # 주요 기능 소개
 - 해당 과제는, MUST 포함 기능들이 서술되어있으며, 이에 대한 정보는 보고서 및 다음 README 파일에서 확인 가능합니다.
 
